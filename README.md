@@ -6,9 +6,9 @@
 
 ### Embedded Controller by Young-Keun Kim, Handong Global University 
 
-Author:  Your Name
+Author:  Ui-Hyeon Jeong
 
-Date:  Updated 2021-8-31
+Date:  Updated 2021-10-5
 
 
 

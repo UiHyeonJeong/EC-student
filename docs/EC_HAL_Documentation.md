@@ -29,10 +29,13 @@ MCU:  				STM32F411RE, Nucleo-64
 
 
 ```c++
-#include "stm32f411xe.h"
+// Distributed for LAB: GPIO
 
-#ifndef __EC_GPIO_H
-#define __EC_GPIO_H
+#include "stm32f411xe.h"
+#include "ecRCC.h"
+
+#ifndef __ECGPIO_H
+#define __ECGPIO_H
 
 #define INPUT  0x00
 #define OUTPUT 0x01
@@ -45,16 +48,24 @@ MCU:  				STM32F411RE, Nucleo-64
 #define LED_PIN 	5
 #define BUTTON_PIN 13
 
-
+#ifdef __cplusplus
+ extern "C" {
+#endif /* __cplusplus */
+	 
 void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
 void GPIO_write(GPIO_TypeDef *Port, int pin, int Output);
 int  GPIO_read(GPIO_TypeDef *Port, int pin);
 void GPIO_mode(GPIO_TypeDef* Port, int pin, int mode);
 void GPIO_ospeed(GPIO_TypeDef* Port, int pin, int speed);
 void GPIO_otype(GPIO_TypeDef* Port, int pin, int type);
-void GPIO_pupdr(GPIO_TypeDef* Port, int pin, int pudr);
+void GPIO_pudr(GPIO_TypeDef* Port, int pin, int pudr);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif
+
 
 ```
 
@@ -82,7 +93,7 @@ void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
 **Example code**
 
 ```c++
-GPIO_init(GPIOA, 5, OUTPUT);
+GPIO_init(GPIOA, 5, OUTPUT); //GPIO_init(GPIOA, 13, 1);
 GPIO_init(GPIOC, 13, INPUT); //GPIO_init(GPIOC, 13, 0);
 ```
 
@@ -109,17 +120,17 @@ void GPIO_init(GPIO_TypeDef *Port, int pin, int mode);
 **Example code**
 
 ```c++
-GPIO_mode(GPIOA, 5, OUTPUT);
+GPIO_mode(GPIOA, 5, OUTPUT); //GPIO_mode(GPIOA, 5, 1);
 ```
 
 
 
-### GPIO_pupdr\(\)
+### GPIO_read\(\)
 
-Configures  GPIO pin modes: In/Out/AF/Analog
+Configures  GPIO pin to read data from input data register
 
 ```c++
-void GPIO_pupdr(GPIO_TypeDef *Port, int pin, int pupd);
+void GPIO_pupdr(GPIO_TypeDef *Port, int pin);
 ```
 
 **Parameters**
@@ -128,7 +139,89 @@ void GPIO_pupdr(GPIO_TypeDef *Port, int pin, int pupd);
 
 * **pin**:  pin number (int) 0~15
 
-* **pupd**:   No Pullup Pulldown (0), o Pullup (1),  Pulldown(02), ANALOG (03)
+  
+
+**Example code**
+
+```c++
+GPIO_read(GPIOC, 13); //13: button pin #
+```
+
+
+
+
+
+### GPIO_write\(\)
+
+Configures  GPIO pin output(Output data from ODR to pin): 0(Low)/ 1(High)
+
+```c++
+void GPIO_write(GPIO_TypeDef *Port, int pin, int output);
+```
+
+**Parameters**
+
+* **Port:**  Port Number,  GPIOA~GPIOH
+
+* **pin**:  pin number (int) 0~15
+
+* **output**:   Low (0), HIgh (1)
+
+  
+
+**Example code**
+
+```c++
+ GPIO_write(GPIOA, 5, HIGH); //GPIO_write(GPIOA, 5, 1); (5:led pin #)
+```
+
+
+
+
+
+### GPIO_otype\(\)
+
+Configures Output types
+
+```c++
+void GPIO_pupdr(GPIO_TypeDef *Port, int pin, int type);
+```
+
+**Parameters**
+
+* **Port:**  Port Number,  GPIOA~GPIOH
+
+* **pin**:  pin number (int) 0~15
+
+* **type**:   Output push-pull(reset state) (0),  Output open-drain (1)
+
+  
+
+**Example code**
+
+```c++
+GPIO_pupdr(GPIOA, 5, 0); //0:push-pull
+```
+
+
+
+
+
+### GPIO_pudr\(\)
+
+Configures pull-up/pull-down resistors (No PUPD/PU/PD/Reserved)
+
+```c++
+void GPIO_pudr(GPIO_TypeDef *Port, int pin, int pudr);
+```
+
+**Parameters**
+
+* **Port:**  Port Number,  GPIOA~GPIOH
+
+* **pin**:  pin number (int) 0~15
+
+* **pudr**:   No Pullup Pulldown (0),  Pullup (1),  Pulldown(02), Reserved (03)
 
   
 
@@ -142,27 +235,37 @@ GPIO_pupdr(GPIOA, 5, 0); //0:No PUPD
 
 
 
+### GPIO_ospeed\(\)
+
+Configures  speed (Low/Medium/Fast/High)
+
+```c++
+void GPIO_ospeed(GPIO_TypeDef *Port, int pin, int speed);
+```
+
+**Parameters**
+
+* **Port:**  Port Number,  GPIOA~GPIOH
+
+* **pin**:  pin number (int) 0~15
+
+* **speed**:   Low speed (0), Medium speed(1),  Fast speed(02), High speed(03)
+
+  
+
+**Example code**
+
+```c++
+GPIO_ospeed(GPIOB, 6 , 1); //1:Medium speed
+```
+
+
+
+
+
 
 
 ------
 
 
 
-## Class or Header name
-
-### Function Name
-
-```text
-
-```
-
-**Parameters**
-
-* p1
-* p2
-
-**Example code**
-
-```text
-
-```
